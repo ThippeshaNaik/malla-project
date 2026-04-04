@@ -1,14 +1,10 @@
 FROM nginx:latest
-
-# Remove default config
 RUN rm /etc/nginx/conf.d/default.conf
+COPY fdx-ui/default.conf /etc/nginx/conf.d
 
-# Copy your custom config
-COPY fdx-ui/default.conf /etc/nginx/conf.d/
+RUN rm -rf /usr/share/nginx/html
 
-# Copy static files (NOT WAR)
-COPY fdx-ui/ /usr/share/nginx/html/
+COPY fdx-ui /usr/share/nginx/html
 
-EXPOSE 80
+ENTRYPOINT ["nginx","-g","daemon off;"]
 
-CMD ["nginx", "-g", "daemon off;"]
